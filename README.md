@@ -25,10 +25,10 @@ NOTE: It has to be below the jQuery link.
 
 Next, you have to define certain things to Light.
 
-Firstly, your templates.
+Firstly, add a link to your templates based on how you set up your server.
 ```javascript
 var light_server = light({
-                       html: ['base.html', 'index.html', 'frontpage.html'],
+                       html: ['/home', '/submit', '/login']
                    })
 ```
 
