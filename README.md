@@ -19,7 +19,7 @@ Setting Light up is fairly easy. Just add the link to the script into your HTML 
 
 NOTE: It has to be below the jQuery link.
 ```html
-<script src="/static/js/light.js"></script> <!-- This has to come first -->
+<script src="/static/js/jquery.min.js"></script> <!-- This has to come first -->
 <script src="/static/js/light.js"></script> <!-- This second -->
 ```
 
