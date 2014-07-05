@@ -25,6 +25,12 @@ var light = function(views) {
                 html_dict[route] = html;
             }
         }).done(function(){
+            // Called when check is false
+            function BrowserSupportError(message) {
+                this.message = message;
+                this.name = "StorageNotSupported";
+            }
+
             // If supported, iterate through html_dict object
             // And store it in localStorage
             if ( support_storage() ) {
@@ -38,7 +44,7 @@ var light = function(views) {
                 }
             }
             else {
-                log('ERROR: Browser does not support localStorage');
+                throw new BrowserSupportError("Browser does not support localStorage");
             }
         });
     });
