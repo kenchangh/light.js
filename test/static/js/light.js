@@ -9,17 +9,30 @@ var $jq = jQuery.noConflict(true);
 // { html: ['/', '/home', '/login'] }
 var light = function(views) {
 
-    var routes, html;
+    var routes, html_dict;
     routes = views.html;
-    html_dict = [];
+    html_dict = {};
 
     // Iterates through routes and make Ajax requests to them
     // Then, store their HTML into html_dict object with the route as key
-    for(var route in routes) {
+    routes.forEach(function(route) {
         $jq.ajax({
             url: route,
             success: function(html) {
                 html_dict[route] = html;
+            }
+        }).done(function(){
+            // If supported, iterate through html_dict object
+            // And store it in localStorage
+            if ( support_storage() ) {
+                var route, html;
+                for (route in html_dict) {
+                    html = html_dict[route];
+                    localStorage[route] = html;
+                }
+            }
+            else {
+                console.log('ERROR: Browser does not support localStorage');
             }
         });
     });
@@ -35,16 +48,5 @@ var light = function(views) {
         }
     }
 
-    // If supported, iterate through html_dict object
-    // And store it in localStorage
-    if (support_storage) {
-        for (var route in html_dict) {
-            var html = html_dict[route];
-            localStorage[route] = html;
-        }
-    }
-    else {
-        console.log('ERROR: Browser does not support localStorage');
-    }
-
 }
+

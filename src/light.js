@@ -22,7 +22,7 @@ var light = function(views) {
                 html_dict[route] = html;
             }
         });
-    });
+    }
 
     // Checks if browser supports localStorage
     function support_storage() {
