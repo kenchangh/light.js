@@ -15,13 +15,29 @@ config['webapp2_extras.sessions'] = {
 
 ##########
 
-
+class BasePage(BaseHandler):
+    
+    def get(self):
+        self.render('index.html')
+        
+    def post(self):
+        pass
+        
+        
+class HTMLPage(BaseHandler):
+    
+    def get(self, **kw):
+        html = kw['html']
+        self.render(html + '.html')
+        
+    def post(self):
+        pass
 
 ##########
 
 app = webapp2.WSGIApplication([
       ('/', BasePage),
-      Route('/transport/<transportation>', handler = Transportation)],
+      Route('/views/<html>', handler = HTMLPage)],
       config = config, debug = True)
 
 if __name__ == '__main__':
