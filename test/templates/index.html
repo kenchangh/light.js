@@ -18,7 +18,15 @@
         </div>
     
 	    <script src="/static/js/jquery.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/lzstring.min.js"></script>
 	    <script src="/static/js/light.js"></script>
-	    <script src="/static/js/bootstrap.min.js"></script>
+	    
+        <script>
+var light_server = light({
+                       html: ['/views/submit',
+                              '/views/login']
+                    });
+        </script>
     </body>
 </html>
