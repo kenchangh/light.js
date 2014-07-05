@@ -60,7 +60,6 @@ var light = function(views) {
         }
     }
 
-    // TODO implement this example using pushState
     $jq('body').click(function(){
         var page = LZString.decompress(localStorage['/views/login']);
         new_doc = document.open('text/html');
