@@ -5,6 +5,9 @@
 // Use $jq for jQuery
 var $jq = jQuery.noConflict(true);
 
+// Make log shortcut to console.log
+var log = console.log.bind(console);
+
 // Light takes in an object, html as key, values as array of routes
 // { html: ['/', '/home', '/login'] }
 var light = function(views) {
@@ -25,14 +28,17 @@ var light = function(views) {
             // If supported, iterate through html_dict object
             // And store it in localStorage
             if ( support_storage() ) {
-                var route, html;
+                var route, html, compr_html;
                 for (route in html_dict) {
                     html = html_dict[route];
-                    localStorage[route] = html;
+
+                    // Compress HTML to insert localStorage
+                    compr_html = LZString.compress(html);
+                    localStorage[route] = compr_html;
                 }
             }
             else {
-                console.log('ERROR: Browser does not support localStorage');
+                log('ERROR: Browser does not support localStorage');
             }
         });
     });
