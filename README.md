@@ -25,11 +25,26 @@ NOTE: It has to be below the jQuery link.
 
 Next, you have to define certain things to Light.
 
-Firstly, add a link to your templates based on how you set up your server.
+Firstly, give a list of links to your HTML files for Light to store.
 ```javascript
 var light_server = light({
                        html: ['/home', '/submit', '/login']
                    })
+```
+Or better yet, set up your routes like so.
+**Node.js (Express)**
+```javascript
+// This renders html based on their routes
+app.get('/views/:html', function(req, res) {
+    res.render( req.param('html'), { title: 'View files' } );
+});
+```
+**Client-side**
+```javascript
+var light_server = light({
+                       base_url: 'views',
+                       html: ['home', 'submit', 'login']
+                   });
 ```
 
 *That's all I have for now.*
