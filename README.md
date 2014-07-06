@@ -29,7 +29,7 @@ Firstly, give a list of links to your HTML files for Light to store.
 ```javascript
 var light_server = light({
                        html: ['home', 'submit', 'login', 'extras/new']
-                   })
+                   });
 ```
 Or better yet, set up your routes like so.
 
