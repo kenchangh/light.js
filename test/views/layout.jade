@@ -1,0 +1,16 @@
+doctype html
+html(lang='en')
+
+  head
+    title= title
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    
+  body
+    block content
+    script(src='/js/jquery.min.js')
+    script(src='/js/bootstrap.min.js')
+    script(src='/js/lzstring.min.js')
+    script(src='/js/light.js')
+    script.
+      var light_server = light({ html: ['/views/submit',
+                                        '/views/login'] });
