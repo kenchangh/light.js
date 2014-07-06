@@ -8,7 +8,7 @@ var $jq = jQuery.noConflict(true);
 // Make log shortcut to console.log
 var log = console.log.bind(console);
 
-// Called when feature not supported
+// Called when browser does not support feature
 function FeatureUnsupported(message) {
     this.message = message;
     this.name = "FeatureUnsupported";
