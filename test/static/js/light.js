@@ -8,6 +8,12 @@ var $jq = jQuery.noConflict(true);
 // Make log shortcut to console.log
 var log = console.log.bind(console);
 
+// Called when feature not supported
+function FeatureUnsupported(message) {
+    this.message = message;
+    this.name = "FeatureUnsupported";
+}
+
 // Light takes in an object, html as key, values as array of routes
 // { html: ['/', '/home', '/login'] }
 var light = function(views) {
@@ -25,11 +31,6 @@ var light = function(views) {
                 html_dict[route] = html;
             }
         }).done(function(){
-            // Called when check is false
-            function BrowserSupportError(message) {
-                this.message = message;
-                this.name = "StorageNotSupported";
-            }
 
             // If supported, iterate through html_dict object
             // And store it in localStorage
@@ -44,7 +45,7 @@ var light = function(views) {
                 }
             }
             else {
-                throw new BrowserSupportError("Browser does not support localStorage");
+                throw new FeatureUnsupported("Browser does not support localStorage");
             }
         });
     });
