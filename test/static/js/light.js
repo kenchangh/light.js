@@ -26,7 +26,7 @@ var light = function(views) {
     routes = views.html;
     html_dict = {};
 
-    // If base_url is given, just concat it along every route
+    // If base_url is given, just concat it before every route
     if ( views.hasOwnProperty('base_url')  ) {
         for (var i = 0; i < routes.length; i++) {
             routes[i] = views.base_url + '/' + routes[i];
@@ -50,7 +50,7 @@ var light = function(views) {
         $jq.ajax({
             url: '/' + route,
             success: function(html) {
-                html_dict[route] = html;
+                html_dict['/' + route] = html;
             }
         }).done(function(){
 
@@ -86,15 +86,14 @@ var light = function(views) {
         doc.close();
     }
 
-    // Prevents default link behaviour
+    // Render page based on link clicked
     $jq('a').click(function(e) {
-        var url;
-        url = $(this).attr('href');
-        log(url);
+        // Prevents link behavior
+        e.preventDefault();
+
+        var url = $jq(this).attr('href');
         render_page(url);
 
-        e.preventDefault();
-        return false;
     });
 
 }
