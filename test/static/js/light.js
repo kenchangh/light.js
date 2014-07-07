@@ -26,7 +26,8 @@ var light = function(views) {
     routes = views.html;
     html_dict = {};
 
-    function store_html() {
+    this.store_html = function() {
+
         // Checks if browser supports localStorage
         function support_storage() {
             try {
@@ -71,8 +72,8 @@ var light = function(views) {
                 compr_html = LZString.compress(html);
 
                 // Sums up total storage size
-                size = compr_html.length;
-                total_size += size;
+                file_size = compr_html.length;
+                total_size += file_size;
 
                 // Assigns compressed html to route
                 localStorage[route] = compr_html;
