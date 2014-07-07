@@ -16,7 +16,7 @@ function FeatureUnsupported(message) {
 
 // Light takes in an object, html as key, values as array of routes
 // { html: ['/', '/home', '/login'] }
-var light = function(views) {
+function light(views) {
 
     /* ================================
         Setting up routes
@@ -82,6 +82,9 @@ var light = function(views) {
                 var token = 'ran';
                 localStorage['light_token'] = token;
             }
+
+            // Makes current localStorage size accessible
+            this.total_size = total_size;
         }
         else {
             throw new FeatureUnsupported("Browser does not support localStorage");
@@ -90,7 +93,7 @@ var light = function(views) {
 
     // Checks if html is stored
     if ( ! localStorage.hasOwnProperty('light_token')  ) {
-        store_html();
+        this.store_html();
     }
 
     /* ================================
