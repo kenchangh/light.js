@@ -14,5 +14,8 @@ html(lang='en')
     script(src='/js/light.js')
     // Initiates Light server
     script.
-      var light_server = light({ html: ['/views/submit',
-                                        '/views/login'] });
+      var light_server = light({
+                             base_url: 'views',
+                             html: ['login', 'submit']
+                         });
+
