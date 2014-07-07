@@ -18,15 +18,40 @@ function FeatureUnsupported(message) {
 // { html: ['/', '/home', '/login'] }
 var light = function(views) {
 
+    /* ================================
+     *  SETTING UP THE ROUTES
+     *  STORING ALL HTML AT LOCALSTORAGE
+     * ================================
+     */
+
     var routes, html_dict;
     routes = views.html;
     html_dict = {};
+
+    // If base_url is given, just concat it along every route
+    if ( views.hasOwnProperty('base_url')  ) {
+        for (var i = 0; i < routes.length; i++) {
+            routes[i] = views.base_url + '/' + routes[i];
+        }
+    }
+    
+    // Checks if browser supports localStorage
+    function support_storage() {
+        try {
+            return 'localStorage' in window &&
+            window['localStorage'] !== null;
+        }
+        catch(e) {
+            return false;
+        }
+    }
+    log(routes);
 
     // Iterates through routes and make Ajax requests to them
     // Then, store their HTML into html_dict object with the route as key
     routes.forEach(function(route) {
         $jq.ajax({
-            url: route,
+            url: '/' + route,
             success: function(html) {
                 html_dict[route] = html;
             }
@@ -39,7 +64,7 @@ var light = function(views) {
                 for (route in html_dict) {
                     html = html_dict[route];
 
-                    // Compress HTML to insert localStorage
+                    // Compress HTML and insert localStorage
                     compr_html = LZString.compress(html);
                     localStorage[route] = compr_html;
                 }
@@ -50,23 +75,25 @@ var light = function(views) {
         });
     });
 
-    // Checks if browser supports localStorage
-    function support_storage() {
-        try {
-            return 'localStorage' in window &&
-            window['localStorage'] !== null;
-        }
-        catch(e) {
-            return false;
-        }
+    /* ================================
+     *  HANDLES LINK CLICKS
+     *  RENDERS HTML PAGE
+     * ================================
+     */
+
+    // Renders page from localStorage based on route
+    function render_page(route) {
+        var html, new_doc;
+        html = LZString.decompress(localStorage[route]);
+        doc = document.open();
+        doc.write(html);
+        doc.close();
     }
 
-    // TODO implement this example using pushState
-    $jq('body').click(function(){
-        var page = LZString.decompress(localStorage['/views/login']);
-        new_doc = document.open('text/html');
-        new_doc.write(page);
-        new_doc.close;
+    // Prevents default link behaviour
+    $jq('a').click(function(e) {
+        e.preventDefault();
+        return false;
     });
 
 }
