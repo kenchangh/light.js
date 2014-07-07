@@ -16,14 +16,14 @@ function FeatureUnsupported(message) {
 
 // Light takes in an object, html as key, values as array of routes
 // { html: ['/', '/home', '/login'] }
-function light(views) {
+function light(params) {
 
     /* ================================
         Setting up routes
         Storing HTML into localStorage
        ================================ */
     var routes, html_dict;
-    routes = views.html;
+    routes = params.html;
     html_dict = {};
 
     this.storeViews = function() {
@@ -42,7 +42,7 @@ function light(views) {
         // If base_url is given, just concat it before every route
         if ( views.hasOwnProperty('base_url')  ) {
             for (var i = 0; i < routes.length; i++) {
-                routes[i] = views.base_url + '/' + routes[i];
+                routes[i] = params.base_url + '/' + routes[i];
             }
         }
         
@@ -92,7 +92,8 @@ function light(views) {
     }
 
     // Checks if html is stored
-    if ( ! localStorage.hasOwnProperty('light_token')  ) {
+    if ( ! localStorage.hasOwnProperty('light_token')
+         && params.hasOwnProperty('html') ) {
         this.storeViews();
     }
 
