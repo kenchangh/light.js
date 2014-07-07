@@ -49,28 +49,33 @@ var light = function(views) {
     routes.forEach(function(route) {
         $jq.ajax({
             url: '/' + route,
+            async: false,
             success: function(html) {
                 html_dict['/' + route] = html;
             }
-        }).done(function(){
-
-            // If supported, iterate through html_dict object
-            // And store it in localStorage
-            if ( support_storage() ) {
-                var route, html, compr_html, new_doc;
-                for (route in html_dict) {
-                    html = html_dict[route];
-
-                    // Compress HTML and insert localStorage
-                    compr_html = LZString.compress(html);
-                    localStorage[route] = compr_html;
-                }
-            }
-            else {
-                throw new FeatureUnsupported("Browser does not support localStorage");
-            }
         });
     });
+
+    // If supported, iterate through html_dict object
+    // And store it in localStorage
+    if ( support_storage() ) {
+        var route, html, compr_html;
+        var total_size = 0;
+        for (route in html_dict) {
+            html = html_dict[route];
+
+            // Compress HTML and insert localStorage
+            compr_html = LZString.compress(html);
+            var size = compr_html.length;
+            log(size);
+            total_size += size;
+            localStorage[route] = compr_html;
+        }
+        log(total_size);
+    }
+    else {
+        throw new FeatureUnsupported("Browser does not support localStorage");
+    }
 
     /* ================================
         Handles link clicks
@@ -93,7 +98,6 @@ var light = function(views) {
 
         var url = $jq(this).attr('href');
         render_page(url);
-
     });
 
 }
