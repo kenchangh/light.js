@@ -26,7 +26,7 @@ function light(views) {
     routes = views.html;
     html_dict = {};
 
-    this.store_html = function() {
+    this.storeViews = function() {
 
         // Checks if browser supports localStorage
         function support_storage() {
@@ -84,7 +84,7 @@ function light(views) {
             }
 
             // Makes current localStorage size accessible
-            this.total_size = total_size;
+            this.storageSize = total_size;
         }
         else {
             throw new FeatureUnsupported("Browser does not support localStorage");
@@ -93,7 +93,7 @@ function light(views) {
 
     // Checks if html is stored
     if ( ! localStorage.hasOwnProperty('light_token')  ) {
-        this.store_html();
+        this.storeViews();
     }
 
     /* ================================
