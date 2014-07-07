@@ -19,11 +19,9 @@ function FeatureUnsupported(message) {
 var light = function(views) {
 
     /* ================================
-     *  SETTING UP THE ROUTES
-     *  STORING ALL HTML AT LOCALSTORAGE
-     * ================================
-     */
-
+        Setting up routes
+        Storing HTML into localStorage
+       ================================ */
     var routes, html_dict;
     routes = views.html;
     html_dict = {};
@@ -45,7 +43,6 @@ var light = function(views) {
             return false;
         }
     }
-    log(routes);
 
     // Iterates through routes and make Ajax requests to them
     // Then, store their HTML into html_dict object with the route as key
@@ -76,10 +73,9 @@ var light = function(views) {
     });
 
     /* ================================
-     *  HANDLES LINK CLICKS
-     *  RENDERS HTML PAGE
-     * ================================
-     */
+        Handles link clicks
+        Renders the page
+       ================================ */
 
     // Renders page from localStorage based on route
     function render_page(route) {
@@ -92,6 +88,11 @@ var light = function(views) {
 
     // Prevents default link behaviour
     $jq('a').click(function(e) {
+        var url;
+        url = $(this).attr('href');
+        log(url);
+        render_page(url);
+
         e.preventDefault();
         return false;
     });
