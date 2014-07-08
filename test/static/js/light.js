@@ -14,86 +14,77 @@ function FeatureUnsupported(message) {
     this.name = "FeatureUnsupported";
 }
 
+// Checks if browser supports localStorage
+function supportStorage() {
+    try {
+        return 'localStorage' in window &&
+        window['localStorage'] !== null;
+    }
+    catch(e) {
+        return false;
+    }
+}
+
 // Light takes in an object, html as key, values as array of routes
 // { html: ['/', '/home', '/login'] }
-function light(params) {
+function light(settings) {
 
     /* ================================
         Setting up routes
         Storing HTML into localStorage
        ================================ */
-    var routes, html_dict;
-    routes = params.html;
-    html_dict = {};
+    var routes = settings.html;
 
     this.storeViews = function() {
 
-        // Checks if browser supports localStorage
-        function support_storage() {
-            try {
-                return 'localStorage' in window &&
-                window['localStorage'] !== null;
-            }
-            catch(e) {
-                return false;
+        // If base_url is given, just concat it before every route
+        if ( settings.hasOwnProperty('baseUrl')  ) {
+            for (var i = 0; i < routes.length; i++) {
+                routes[i] = settings.baseUrl + '/' + routes[i];
             }
         }
 
-        // If base_url is given, just concat it before every route
-        if ( views.hasOwnProperty('base_url')  ) {
-            for (var i = 0; i < routes.length; i++) {
-                routes[i] = params.base_url + '/' + routes[i];
-            }
-        }
-        
+        var total_size = 0;
         // Iterates through routes and make Ajax requests to them
         // Then, store their HTML into html_dict object with the route as key
         routes.forEach(function(route) {
             $jq.ajax({
                 url: '/' + route,
-                async: false,
                 success: function(html) {
-                    html_dict['/' + route] = html;
+                    // If supported, iterate through html_dict object
+                    // And store it in localStorage
+                    if ( supportStorage() ) {
+                        var route, comprHtml, file_size;
+
+                        // Compress HTML and insert localStorage
+                        comprHtml = LZString.compress(html);
+
+                        // Sums up total storage size
+                        file_size = comprHtml.length;
+                        total_size += file_size;
+
+                        // Assigns compressed html to route
+                        localStorage[route] = comprHtml;
+
+                        // Creates tokens to make sure Light only runs once
+                        localStorage['light_token'] = 'ran';
+                        log('ran');
+                    }
+                    else {
+                        throw new FeatureUnsupported("Browser does not support localStorage");
+                    }
                 }
             });
         });
 
-        // If supported, iterate through html_dict object
-        // And store it in localStorage
-        if ( support_storage() ) {
-            var route, html, compr_html,
-                total_size, file_size;
+        // Makes localStorage size accessible
+        this.storageSize = total_size;
 
-            total_size = 0;
-            for (route in html_dict) {
-                html = html_dict[route];
-
-                // Compress HTML and insert localStorage
-                compr_html = LZString.compress(html);
-
-                // Sums up total storage size
-                file_size = compr_html.length;
-                total_size += file_size;
-
-                // Assigns compressed html to route
-                localStorage[route] = compr_html;
-
-                // Creates tokens to make sure Light only runs once
-                var token = 'ran';
-                localStorage['light_token'] = token;
-            }
-
-            // Makes current localStorage size accessible
-            this.storageSize = total_size;
-        }
-        else {
-            throw new FeatureUnsupported("Browser does not support localStorage");
-        }
     }
 
     // Checks if html is stored
     if ( ! localStorage.hasOwnProperty('light_token')
-         && params.hasOwnProperty('html') ) {
+        && settings.hasOwnProperty('html') ) {
         this.storeViews();
     }
 
@@ -103,8 +94,8 @@ function light(params) {
        ================================ */
 
     // Renders page from localStorage based on route
-    function render_page(route) {
-        var html, new_doc;
+    function renderPage(route) {
+        var html, doc;
         html = LZString.decompress(localStorage[route]);
         doc = document.open();
         doc.write(html);
@@ -117,7 +108,7 @@ function light(params) {
         e.preventDefault();
 
         var url = $jq(this).attr('href');
-        render_page(url);
+        renderPage(url);
     });
 
 }
