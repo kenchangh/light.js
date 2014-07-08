@@ -40,7 +40,7 @@ function light(settings) {
         // If base_url is given, just concat it before every route
         if ( settings.hasOwnProperty('baseUrl')  ) {
             for (var i = 0; i < routes.length; i++) {
-                routes[i] = settings.baseUrl + '/' + routes[i];
+                routes[i] = '/' + settings.baseUrl + '/' + routes[i];
             }
         }
 
@@ -48,13 +48,14 @@ function light(settings) {
         // Iterates through routes and make Ajax requests to them
         // Then, store their HTML into html_dict object with the route as key
         routes.forEach(function(route) {
+            log(route);
             $jq.ajax({
-                url: '/' + route,
+                url: route,
                 success: function(html) {
                     // If supported, iterate through html_dict object
                     // And store it in localStorage
                     if ( supportStorage() ) {
-                        var route, comprHtml, file_size;
+                        var comprHtml, file_size;
 
                         // Compress HTML and insert localStorage
                         comprHtml = LZString.compress(html);
@@ -62,13 +63,14 @@ function light(settings) {
                         // Sums up total storage size
                         file_size = comprHtml.length;
                         total_size += file_size;
+                        // Makes localStorage size accessible
+                        light.prototype.storageSize = total_size;
 
                         // Assigns compressed html to route
                         localStorage[route] = comprHtml;
 
                         // Creates tokens to make sure Light only runs once
                         localStorage['light_token'] = 'ran';
-                        log('ran');
                     }
                     else {
                         throw new FeatureUnsupported("Browser does not support localStorage");
@@ -77,8 +79,6 @@ function light(settings) {
             });
         });
 
-        // Makes localStorage size accessible
-        this.storageSize = total_size;
 
     }
 
