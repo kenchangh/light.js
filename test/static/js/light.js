@@ -14,6 +14,11 @@ function FeatureUnsupported(message) {
     this.name = "FeatureUnsupported";
 }
 
+function SettingsIncorrect(message) {
+    this.message = message;
+    this.name = "SettingsIncorrect";
+}
+
 // Checks if browser supports localStorage
 function supportStorage() {
     try {
@@ -83,9 +88,13 @@ function light(settings) {
     }
 
     // Checks if html is stored
-    if ( ! localStorage.hasOwnProperty('light_token')
-        && settings.hasOwnProperty('html') ) {
-        this.storeViews();
+    if ( ! localStorage.hasOwnProperty('light_token') ) {
+        if ( settings.hasOwnProperty('html') ) {
+            this.storeViews();
+        }
+        else {
+            throw new SettingsIncorrect("html property not set!")
+        }
     }
 
     /* ================================
