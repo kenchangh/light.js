@@ -1,5 +1,5 @@
-Light.js
-========
+Light
+=====
 ###Let's move the server into the browser!
 
 Table of Content
@@ -9,9 +9,15 @@ Table of Content
 
 Introduction <a name='intro'></a>
 ------------
-Fast. Blazing fast. Light.js is a speedy client-side server. It is to reduce any interactions with the server. And run everything on the client's side. Yes, even a database and a "server" that serves up views.
+Fast. Blazing fast. Light is a speedy client-side server. This is to reduce server-side processing and make page loads faster (by minimizing HTTP requests).
 
-Light operates mainly on HTML5's local storage and pushState, both which are pretty new features.
+Light operates mainly on HTML5's localStorage and pushState, both which are pretty new features. So browser compatibility is an issue.
+
+Features <a name='features'></a>
+--------
+- Page rendering (without requests)
+- Image, stylesheet and script loading  (without requests)
+- Small and fast persistent database at browser
 
 Getting Started <a name='start'></a>
 ---------------
