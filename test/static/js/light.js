@@ -15,6 +15,7 @@ function FeatureUnsupported(message) {
   this.name = "FeatureUnsupported";
 }
 
+// Called function does not correspond with settings
 function SettingsIncorrect(message) {
   this.message = message;
   this.name = "SettingsIncorrect";
@@ -33,12 +34,13 @@ function supportStorage() {
 
 // Light takes in an object, html as key, values as array of routes
 // { html: ['/', '/home', '/login'] }
-function light(settings) {
+function Light(settings) {
 
   /* ================================
       Setting up routes
       Storing HTML into localStorage
      ================================ */
+  var light = this;
   var routes = settings.html;
 
   this.storeViews = function() {
@@ -67,13 +69,14 @@ function light(settings) {
             var file_size = comprHtml.length;
             total_size += file_size;
             // Makes localStorage size accessible
-            light.prototype.storageSize = total_size;
+            Light.prototype.storageSize = total_size;
 
             // Assigns compressed html to route
             localStorage[route] = comprHtml;
 
             // Creates tokens to make sure Light only runs once
             localStorage['light_token'] = 'ran';
+            log('html stored!');
           }
           else {
             throw new FeatureUnsupported("Browser does not support localStorage");
@@ -84,17 +87,6 @@ function light(settings) {
 
   } // storeViews
     
-  // TODO don't run storeViews if html not present
-  // Checks if html is stored
-  if ( ! localStorage.hasOwnProperty('light_token') ) {
-    if ( settings.hasOwnProperty('html') ) {
-      // this.storeViews();
-    }
-    else {
-      throw new SettingsIncorrect("html property not set!")
-    }
-  }
-
   /* ================================
       Handles link clicks
       Renders the page
@@ -134,7 +126,21 @@ function light(settings) {
       var link = $jq('a');
       var distance = calculateDistance(link, mX, mY);
 
-      // do something here
+      // Cursor distance with link
+      if (distance < 200) {
+        if ( ! localStorage.hasOwnProperty('light_token') ) {
+          if ( settings.hasOwnProperty('html') ) {
+            // Renders page in background when approaching link
+            light.storeViews();
+          }
+          else {
+            throw new SettingsIncorrect("html property not set!");
+          }
+        }
+        else {
+          log('something here')
+        }
+      }
     });
 
  })();
