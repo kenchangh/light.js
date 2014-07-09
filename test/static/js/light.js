@@ -1,5 +1,6 @@
 /*
  * Author: Maverick Chan
+ * License: MIT License
  */
 
 // Use $jq for jQuery
@@ -68,14 +69,14 @@ function light(settings) {
             // Makes localStorage size accessible
             light.prototype.storageSize = total_size;
 
-              // Assigns compressed html to route
-              localStorage[route] = comprHtml;
+            // Assigns compressed html to route
+            localStorage[route] = comprHtml;
 
-              // Creates tokens to make sure Light only runs once
-              localStorage['light_token'] = 'ran';
+            // Creates tokens to make sure Light only runs once
+            localStorage['light_token'] = 'ran';
           }
           else {
-              throw new FeatureUnsupported("Browser does not support localStorage");
+            throw new FeatureUnsupported("Browser does not support localStorage");
           }
         }
       });
@@ -119,9 +120,7 @@ function light(settings) {
   // Mouse cursor worker
   (function() {
 
-    var mX, mY, distance;
-    var link = $jq('a');
-
+    // Distance of mouse and element
     function calculateDistance(elem, mouseX, mouseY) {
       return Math.floor(Math.sqrt(Math.pow(mouseX
              - (elem.offset().left+(elem.width()/2)), 2)
@@ -130,14 +129,15 @@ function light(settings) {
     }
 
     $jq(document).mousemove(function(e) {  
-        mX = e.pageX;
-        mY = e.pageY;
-        distance = calculateDistance(link, mX, mY);
+      var mX = e.pageX;
+      var mY = e.pageY;
+      var link = $jq('a');
+      var distance = calculateDistance(link, mX, mY);
 
-        // do something here
+      // do something here
     });
 
-  })();
+ })();
 
 } // light object
 
