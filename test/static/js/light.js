@@ -21,11 +21,11 @@ function SettingsIncorrect(message) {
   this.name = "SettingsIncorrect";
 }
 
-// Checks if browser supports localStorage
+// Checks if browser supports Storage
 function supportStorage() {
   try {
-    return 'localStorage' in window &&
-    window['localStorage'] !== null;
+    return 'Storage' in window &&
+    window['Storage'] !== null;
   }
   catch(e) {
     return false;
@@ -38,10 +38,10 @@ function Light(settings) {
 
   var light = this;
 
-  /* ================================
+  /* =================================
       Setting up routes
-      Storing HTML into localStorage
-     ================================ */
+      Storing HTML into sessionStorage
+     ================================= */
 
   light.storeViews = function() {
 
@@ -78,27 +78,27 @@ function Light(settings) {
         url: route,
         success: function(html) {
           // If supported, iterate through html_dict object
-          // And store it in localStorage
+          // And store it in sessionStorage
           if ( supportStorage() ) {
-            // Compress HTML and insert localStorage
+            // Compress HTML and insert sessionStorage
             var comprHtml = LZString.compress(html);
 
             // Sums up total storage size
             var file_size = comprHtml.length;
             total_size += file_size;
-            // Makes localStorage size accessible
+            // Makes sessionStorage size accessible
             Light.prototype.storageSize = total_size;
 
             // Assigns compressed html to route
-            localStorage[route] = comprHtml;
+            sessionStorage[route] = comprHtml;
 
             // Creates tokens to make sure Light only runs once
-            localStorage['light_token'] = 'ran';
+            sessionStorage['light_token'] = 'ran';
             log('html stored!');
           }
           else {
             throw new FeatureUnsupported('Browser does not'
-                                         + 'support localStorage');
+                                         + 'support sessionStorage');
           }
         }
       });
@@ -111,9 +111,9 @@ function Light(settings) {
       Renders the page
      ================================ */
 
-  // Renders page from localStorage based on route
+  // Renders page from sessionStorage based on route
   function renderPage(route) {
-    var html = LZString.decompress(localStorage[route]);
+    var html = LZString.decompress(sessionStorage[route]);
     var doc = document.open();
     doc.write(html);
     doc.close();
