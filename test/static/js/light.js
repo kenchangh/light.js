@@ -42,57 +42,56 @@ function light(settings) {
 
   this.storeViews = function() {
 
-      // If base_url is given, just concat it before every route
-      if ( settings.hasOwnProperty('baseUrl')  ) {
-          for (var i = 0; i < routes.length; i++) {
-              routes[i] = '/' + settings.baseUrl + '/' + routes[i];
-          }
+    // If base_url is given, just concat it before every route
+    if ( settings.hasOwnProperty('baseUrl')  ) {
+      for (var i = 0; i < routes.length; i++) {
+          routes[i] = '/' + settings.baseUrl + '/' + routes[i];
       }
+    }
 
-      var total_size = 0;
-      // Iterates through routes and make Ajax requests to them
-      // Then, store their HTML into html_dict object with the route as key
-      routes.forEach(function(route) {
-          log(route);
-          $jq.ajax({
-              url: route,
-              success: function(html) {
-                  // If supported, iterate through html_dict object
-                  // And store it in localStorage
-                  if ( supportStorage() ) {
-                      // Compress HTML and insert localStorage
-                      var comprHtml = LZString.compress(html);
+    var total_size = 0;
+    // Iterates through routes and make Ajax requests to them
+    // Then, store their HTML into html_dict object with the route as key
+    routes.forEach(function(route) {
+      $jq.ajax({
+        url: route,
+        success: function(html) {
+          // If supported, iterate through html_dict object
+          // And store it in localStorage
+          if ( supportStorage() ) {
+            // Compress HTML and insert localStorage
+            var comprHtml = LZString.compress(html);
 
-                      // Sums up total storage size
-                      var file_size = comprHtml.length;
-                      total_size += file_size;
-                      // Makes localStorage size accessible
-                      light.prototype.storageSize = total_size;
+            // Sums up total storage size
+            var file_size = comprHtml.length;
+            total_size += file_size;
+            // Makes localStorage size accessible
+            light.prototype.storageSize = total_size;
 
-                      // Assigns compressed html to route
-                      localStorage[route] = comprHtml;
+              // Assigns compressed html to route
+              localStorage[route] = comprHtml;
 
-                      // Creates tokens to make sure Light only runs once
-                      localStorage['light_token'] = 'ran';
-                  }
-                  else {
-                      throw new FeatureUnsupported("Browser does not support localStorage");
-                  }
-              }
-          });
+              // Creates tokens to make sure Light only runs once
+              localStorage['light_token'] = 'ran';
+          }
+          else {
+              throw new FeatureUnsupported("Browser does not support localStorage");
+          }
+        }
       });
+    });
 
   } // storeViews
     
   // TODO don't run storeViews if html not present
   // Checks if html is stored
   if ( ! localStorage.hasOwnProperty('light_token') ) {
-      if ( settings.hasOwnProperty('html') ) {
-          // this.storeViews();
-      }
-      else {
-          throw new SettingsIncorrect("html property not set!")
-      }
+    if ( settings.hasOwnProperty('html') ) {
+      // this.storeViews();
+    }
+    else {
+      throw new SettingsIncorrect("html property not set!")
+    }
   }
 
   /* ================================
@@ -102,10 +101,10 @@ function light(settings) {
 
   // Renders page from localStorage based on route
   function renderPage(route) {
-      var html = LZString.decompress(localStorage[route]);
-      var doc = document.open();
-      doc.write(html);
-      doc.close();
+    var html = LZString.decompress(localStorage[route]);
+    var doc = document.open();
+    doc.write(html);
+    doc.close();
   }
 
   // Render page based on link clicked
@@ -117,16 +116,17 @@ function light(settings) {
     // renderPage(url);
   });
 
-    
+  // Mouse cursor worker
   (function() {
 
     var mX, mY, distance;
     var link = $jq('a');
 
     function calculateDistance(elem, mouseX, mouseY) {
-        return Math.floor(Math.sqrt(Math.pow(mouseX
-               - (elem.offset().left+(elem.width()/2)), 2)
-               + Math.pow(mouseY-(elem.offset().top+(elem.height()/2)), 2)));
+      return Math.floor(Math.sqrt(Math.pow(mouseX
+             - (elem.offset().left+(elem.width()/2)), 2)
+             + Math.pow(mouseY-(elem.offset().top
+             + (elem.height()/2)), 2)));
     }
 
     $jq(document).mousemove(function(e) {  
