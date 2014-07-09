@@ -133,17 +133,27 @@ function Light(settings) {
 
     // Distance of mouse and element
     function calculateDistance(elem, mouseX, mouseY) {
-      return Math.floor(Math.sqrt(Math.pow(mouseX
-             - (elem.offset().left+(elem.width()/2)), 2)
-             + Math.pow(mouseY-(elem.offset().top
-             + (elem.height()/2)), 2)));
+             
+      function PYTHAGORAS_THEOREM(x, y) {
+        var sqrt = Math.sqrt;
+        var square = function(num) {
+          return Math.pow(num, 2);
+        }
+        
+        // NOTE:  Negative values make no difference (squared)
+        return sqrt( square(x) + square(y) );
+      }
+      
+      var distanceX = mouseX - ( elem.offset().left + (elem.width() / 2) );
+      var distanceY = mouseY - ( elem.offset().top + (elem.height() / 2) );
+      return Math.floor( PYTHAGORAS_THEOREM(distanceX, distanceY) );
     }
 
     $jq(document).mousemove(function(e) {  
-      var mX = e.pageX;
-      var mY = e.pageY;
-      var link = $jq('a');
-      var distance = calculateDistance(link, mX, mY);
+      var mouseX = e.pageX;
+      var mouseY = e.pageY;
+      var links = $jq('a');
+      var distance = calculateDistance(links, mX, mY);
 
       // Cursor distance with link
       if (distance <= 250) {
