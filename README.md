@@ -1,6 +1,6 @@
-Light
+Light.js
 =====
-###A different kind of client-side rendering
+###Renders the future in light-speed!
 
 Table of Content
 ----------------
@@ -10,9 +10,13 @@ Table of Content
 
 Introduction <a name='intro'></a>
 ------------
-Light is a speedy client-side page renderer. It lets you do what your server is supposed to do, process and render data. Then on the client's end, it just lazily loads the pre-rendered page, without relying on the response times.
+Light.js is a speedy client-side page pre-renderer. It lets you do what your server is supposed to do, process and render data. Then on the client's end, it just lazily loads the pre-rendered page, without relying on the response times.
 
-Light operates mainly on HTML5's localStorage and pushState, both which are pretty new features. So browser compatibility is an issue.
+How does this pre-rendering work without hurting page load times? The trick is that Light.js tracks the movement of the mouse. 
+
+Whenever it gets close enough to a link, it will send a background request to the server, returning the rendered webpage and stores it into the Storage. When the user clicks the link, Javascript just loads the page out from the Storage, without any delay from the connection.
+
+Light.js does not only restrict pre-rendering to the movement of mouse only, it comes with several options that make it a flexible tool.
 
 Features <a name='features'></a>
 --------
@@ -22,7 +26,7 @@ Features <a name='features'></a>
 
 Getting Started <a name='start'></a>
 ---------------
-Setting Light up is fairly easy. Just add the link to the script into your HTML files. 
+Setting Light.js up is fairly easy. Just add the link to the script into your HTML files. 
 
 NOTE: It has to be below the jQuery link.
 ```html
@@ -34,7 +38,7 @@ Next, you have to define certain things to Light.
 
 Firstly, give a list of links to your HTML files for Light to store.
 ```javascript
-var light_server = light({
+var light_server = new Light({
                        html: ['home', 'submit', 'login', 'extras/new']
                    });
 ```
@@ -49,7 +53,7 @@ app.get('/views/:html', function(req, res) {
 ```
 **Client-side**
 ```javascript
-var light_server = light({
+var light_server = new Light({
                        base_url: 'views',
                        html: ['home', 'submit', 'login']
                    });
