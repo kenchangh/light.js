@@ -126,6 +126,7 @@ function Light(settings) {
 
     var url = $jq(this).attr('href');
     renderPage(url);
+    History.pushState(null, null, url);
   });
 
   // Mouse cursor worker
