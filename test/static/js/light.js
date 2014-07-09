@@ -36,63 +36,73 @@ function supportStorage() {
 // { html: ['/', '/home', '/login'] }
 function Light(settings) {
 
+  var light = this;
+
   /* ================================
       Setting up routes
       Storing HTML into localStorage
      ================================ */
-  var light = this;
-  var routes = settings.html;
 
   light.storeViews = function() {
 
     // Run function only once per page
     light.storeViews = Function('');
 
+    if (typeof settings == 'undefined') {
+      log('passed')
+      settings = {};
+    }
+
     if ( settings.hasOwnProperty('html') ) {
+      var routes = settings.html;
+     
       // If base_url is given, just concat it before every route
       if ( settings.hasOwnProperty('baseUrl')  ) {
         for (var i = 0; i < routes.length; i++) {
             routes[i] = '/' + settings.baseUrl + '/' + routes[i];
         }
       }
-
-      var total_size = 0;
-      // Iterates through routes and make Ajax requests to them
-      routes.forEach(function(route) {
-        $jq.ajax({
-          url: route,
-          success: function(html) {
-            // If supported, iterate through html_dict object
-            // And store it in localStorage
-            if ( supportStorage() ) {
-              // Compress HTML and insert localStorage
-              var comprHtml = LZString.compress(html);
-
-              // Sums up total storage size
-              var file_size = comprHtml.length;
-              total_size += file_size;
-              // Makes localStorage size accessible
-              Light.prototype.storageSize = total_size;
-
-              // Assigns compressed html to route
-              localStorage[route] = comprHtml;
-
-              // Creates tokens to make sure Light only runs once
-              localStorage['light_token'] = 'ran';
-              log('html stored!');
-            }
-            else {
-              throw new FeatureUnsupported('Browser does not'
-                                           + 'support localStorage');
-            }
-          }
-        });
+    }
+    else {
+      var routes = [];
+      $jq('a').each(function() {
+        url = $jq(this).attr('href');
+        routes.push(url);
       });
     }
-    // No 'html' in settings, render all page links
-    else {
-      // TODO render all page links
-    }
+
+    var total_size = 0;
+    // Iterates through routes and make Ajax requests to them
+    routes.forEach(function(route) {
+      $jq.ajax({
+        url: route,
+        success: function(html) {
+          // If supported, iterate through html_dict object
+          // And store it in localStorage
+          if ( supportStorage() ) {
+            // Compress HTML and insert localStorage
+            var comprHtml = LZString.compress(html);
+
+            // Sums up total storage size
+            var file_size = comprHtml.length;
+            total_size += file_size;
+            // Makes localStorage size accessible
+            Light.prototype.storageSize = total_size;
+
+            // Assigns compressed html to route
+            localStorage[route] = comprHtml;
+
+            // Creates tokens to make sure Light only runs once
+            localStorage['light_token'] = 'ran';
+            log('html stored!');
+          }
+          else {
+            throw new FeatureUnsupported('Browser does not'
+                                         + 'support localStorage');
+          }
+        }
+      });
+    });
 
   } // storeViews
     
