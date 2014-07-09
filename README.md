@@ -1,6 +1,6 @@
 Light
 =====
-###Let's move the server into the browser!
+###A different kind of client-side rendering
 
 Table of Content
 ----------------
@@ -9,15 +9,15 @@ Table of Content
 
 Introduction <a name='intro'></a>
 ------------
-Fast. Blazing fast. Light is a speedy client-side server. This is to reduce server-side processing and make page loads faster (by minimizing HTTP requests).
+Light is a speedy client-side page renderer. It lets you do what your server is supposed to do, process and render data. Then on the client's end, it just lazily loads the pre-rendered page, without relying on the response times.
 
 Light operates mainly on HTML5's localStorage and pushState, both which are pretty new features. So browser compatibility is an issue.
 
 Features <a name='features'></a>
 --------
-- Page rendering (without requests)
-- Image, stylesheet and script loading  (without requests)
-- Small and fast persistent database at browser
+- Preload rendered page into Javascript
+- Renders with Javascript (almost 0 load time)
+- Snappy web page performance
 
 Getting Started <a name='start'></a>
 ---------------
@@ -54,6 +54,6 @@ var light_server = light({
                    });
 ```
 
-*That's all I have for now.*
-
-Interested? Contact me at guanhao3797@gmail.com :smile:
+Support <a name='support'></a>
+-------
+Any comments or questions, please contact me at guanhao3797@gmail.com. The code is licensed under the MIT license.
