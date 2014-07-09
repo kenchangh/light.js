@@ -97,7 +97,7 @@ function Light(settings) {
             log('html stored!');
           }
           else {
-            throw new FeatureUnsupported('Browser does not'
+            throw new FeatureUnsupported('Browser does not '
                                          + 'support sessionStorage');
           }
         }
@@ -144,8 +144,10 @@ function Light(settings) {
         return sqrt( square(x) + square(y) );
       }
       
-      var distanceX = mouseX - ( elem.offset().left + (elem.width() / 2) );
-      var distanceY = mouseY - ( elem.offset().top + (elem.height() / 2) );
+      var distanceX = mouseX - ( elem.offset().left +
+                      (elem.width() / 2) );
+      var distanceY = mouseY - ( elem.offset().top +
+                      (elem.height() / 2) );
       return Math.floor( PYTHAGORAS_THEOREM(distanceX, distanceY) );
     }
 
