@@ -57,6 +57,6 @@ var light_server = light({
 
 Support <a name='support'></a>
 -------
-Any comments or questions, please contact me at guanhao3797@gmail.com or even, tweet to me at @guanhao97.
+Any comments or questions, please contact me at guanhao3797@gmail.com or even, tweet to me at [@guanhao97](https://twitter.com/guanhao97).
 
 The code is licensed under the MIT license.
