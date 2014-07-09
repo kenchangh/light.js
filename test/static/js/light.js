@@ -49,7 +49,6 @@ function Light(settings) {
     light.storeViews = Function('');
 
     if (typeof settings == 'undefined') {
-      log('passed')
       settings = {};
     }
 
@@ -68,7 +67,7 @@ function Light(settings) {
       var links = document.getElementsByTagName("a");
       // A vanilla method is much, much faster
       for (var i = 0; i < links.length; i++) {
-       routes.push(links[i].attributes.href); 
+        routes.push(links[i].pathname); 
       }
     }
 
@@ -154,7 +153,7 @@ function Light(settings) {
       var mouseX = e.pageX;
       var mouseY = e.pageY;
       var links = $jq('a');
-      var distance = calculateDistance(links, mX, mY);
+      var distance = calculateDistance(links, mouseX, mouseY);
 
       // Cursor distance with link
       if (distance <= 250) {
