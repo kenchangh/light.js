@@ -65,10 +65,11 @@ function Light(settings) {
     }
     else {
       var routes = [];
-      $jq('a').each(function() {
-        url = $jq(this).attr('href');
-        routes.push(url);
-      });
+      var links = document.getElementsByTagName("a");
+      // A vanilla method is much, much faster
+      for (var i = 0; i < links.length; i++) {
+       routes.push(links[i].attributes.href); 
+      }
     }
 
     var total_size = 0;
