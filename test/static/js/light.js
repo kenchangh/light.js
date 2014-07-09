@@ -54,7 +54,6 @@ function Light(settings) {
 
     var total_size = 0;
     // Iterates through routes and make Ajax requests to them
-    // Then, store their HTML into html_dict object with the route as key
     routes.forEach(function(route) {
       $jq.ajax({
         url: route,
@@ -79,7 +78,8 @@ function Light(settings) {
             log('html stored!');
           }
           else {
-            throw new FeatureUnsupported("Browser does not support localStorage");
+            throw new FeatureUnsupported('Browser does not'
+                                         + 'support localStorage');
           }
         }
       });
@@ -105,8 +105,8 @@ function Light(settings) {
     // Prevents link behavior
     e.preventDefault();
 
-    // var url = $jq(this).attr('href');
-    // renderPage(url);
+    var url = $jq(this).attr('href');
+    renderPage(url);
   });
 
   // Mouse cursor worker
@@ -145,5 +145,5 @@ function Light(settings) {
 
  })();
 
-} // light object
+} // Light object
 
