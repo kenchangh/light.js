@@ -16,6 +16,8 @@ How does this pre-rendering work without hurting page load times? The trick is t
 
 Whenever it gets close enough to a link, it will send a background request to the server, returning the rendered webpage and stores it into the Storage. When the user clicks the link, Javascript just loads the page out from the Storage, without any delay from the connection.
 
+Light.js does not only restrict pre-rendering to the movement of mouse only, it comes with several options that make it a flexible tool.
+
 Features <a name='features'></a>
 --------
 - Preload rendered page into Javascript
