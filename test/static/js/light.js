@@ -120,9 +120,8 @@ function light(settings) {
     
   (function() {
 
-    var mX, mY, distance,
-        $distance = $('#distance span'),
-        $element  = $('#element');
+    var mX, mY, distance;
+    var link = $jq('a');
 
     function calculateDistance(elem, mouseX, mouseY) {
         return Math.floor(Math.sqrt(Math.pow(mouseX
@@ -130,11 +129,12 @@ function light(settings) {
                + Math.pow(mouseY-(elem.offset().top+(elem.height()/2)), 2)));
     }
 
-    $(document).mousemove(function(e) {  
+    $jq(document).mousemove(function(e) {  
         mX = e.pageX;
         mY = e.pageY;
-        distance = calculateDistance($element, mX, mY);
-        $distance.text(distance);         
+        distance = calculateDistance(link, mX, mY);
+
+        // do something here
     });
 
   })();
