@@ -6,6 +6,7 @@ Table of Content
 ----------------
 - [Introduction](#intro)
 - [Getting Started](#start)
+- [Support](#support)
 
 Introduction <a name='intro'></a>
 ------------
@@ -56,4 +57,6 @@ var light_server = light({
 
 Support <a name='support'></a>
 -------
-Any comments or questions, please contact me at guanhao3797@gmail.com. The code is licensed under the MIT license.
+Any comments or questions, please contact me at guanhao3797@gmail.com or even, tweet to me at @guanhao97.
+
+The code is licensed under the MIT license.
