@@ -92,8 +92,6 @@ function Light(settings) {
             // Assigns compressed html to route
             sessionStorage[route] = comprHtml;
 
-            // Creates tokens to make sure Light only runs once
-            sessionStorage['light_token'] = 'ran';
             log('html stored!');
           }
           else {
