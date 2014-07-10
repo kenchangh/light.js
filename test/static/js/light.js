@@ -124,9 +124,11 @@ function Light(settings) {
     // Prevents link behavior
     e.preventDefault();
 
+    console.time('renderPage');
     var url = $jq(this).attr('href');
     renderPage(url);
     History.pushState(null, null, url);
+    console.timeEnd('renderPage');
   });
 
   // Mouse cursor worker
@@ -156,13 +158,19 @@ function Light(settings) {
       var mouseX = e.pageX;
       var mouseY = e.pageY;
       var links = $jq('a');
-      var distance = calculateDistance(links, mouseX, mouseY);
 
-      // Cursor distance with link
-      if (distance <= 250) {
-        // Renders page in background when approaching link
-        light.storeViews();
+      try {
+        var distance = calculateDistance(links, mouseX, mouseY);
+        // Cursor distance with link
+        if (distance <= 250) {
+          // Renders page in background when approaching link
+          light.storeViews();
+        }
       }
+      catch(TypeError) {
+        return null;
+      }
+
     });
 
  })();
