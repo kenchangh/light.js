@@ -174,8 +174,14 @@ function Light(settings) {
     light.storeViews();
 
     window.setInterval(function() {
+      // Default value for interval
+      if (typeof settings.interval == 'undefined') {
+        settings.interval = 50000;
+      }
+
       light.storeViews();
-    }, 60000);
+
+    }, setttings.interval);
   }
 
   // Mouse cursor worker
@@ -225,4 +231,9 @@ function Light(settings) {
   }
 
 } // Light object
+
+// TODO Setup test cases
+// With mouseApproach
+// With html set
+// With base_url
 
