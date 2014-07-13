@@ -42,7 +42,6 @@ function Light(settings) {
     settings = {};
   }
 
-
   /* =================================
       Setting up routes
       Storing HTML into sessionStorage
@@ -62,7 +61,7 @@ function Light(settings) {
     }
     else {
       var routes = [];
-      var links = document.getElementsByTagName("a");
+      var links = document.getElementsByTagName('a');
       // A vanilla method is much, much faster
       for (var i = 0; i < links.length; i++) {
         routes.push(links[i].pathname); 
@@ -70,6 +69,7 @@ function Light(settings) {
     }
 
     var total_size = 0;
+    light.routes = routes;
     // Iterates through routes and make Ajax requests to them
     routes.forEach(function(route) {
       $jq.ajax({
@@ -117,17 +117,36 @@ function Light(settings) {
 
   // Render page based on link clicked
   $jq('a').click(function(e) {
-    // Prevents link behavior
-    e.preventDefault();
 
-    console.time('renderView');
-    var url = $jq(this).attr('href');
-    renderView(url);
-    history.pushState(null, null, url);
-    console.timeEnd('renderView');
+    var link = this.pathname;
+    function changeView(link) {
+      e.preventDefault();
+
+      console.time('renderView');
+      var url = link;
+      renderView(url);
+      history.pushState(null, null, url);
+      console.timeEnd('renderView');
+    }
+
+    if (typeof settings.html == 'undefined') {
+      changeView();
+    }
+    else {
+      var routes = light.routes;
+      for (var i = 0; i < routes.length; i++) {
+        if (link == routes[i]) {
+          changeView(link);
+          break;
+        }
+      }
+    }
   });
 
+  // Becomes default choice
   if (typeof settings.on == 'undefined' || 'intervals') {
+    light.storeViews();
+
     window.setInterval(function() {
       light.storeViews();
     }, 60000);
