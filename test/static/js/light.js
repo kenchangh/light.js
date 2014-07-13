@@ -153,13 +153,24 @@ function Light(settings) {
     }
   });
 
+  /* ================================
+      Handles state change
+     ================================ */
+
   // On back button
   window.onpopstate = function(event) {
-    log(document.location)
+    var currentLocation = window.location.pathname;
+    log(currentLocation)
+    renderView(currentLocation);
   };
 
+  /* ================================
+      Settings
+     ================================ */
+
   // Becomes default choice
-  if (typeof settings.on == 'undefined' || 'intervals') {
+  if ( (typeof settings.on == 'undefined')
+       || settings.on == 'intervals' ) {
     light.storeViews();
 
     window.setInterval(function() {
