@@ -79,16 +79,16 @@ function Light(settings) {
           // And store it in sessionStorage
           if ( supportStorage() ) {
             // Compress HTML and insert sessionStorage
-            var comprHtml = LZString.compress(html);
+            var comprHTML = LZString.compress(html);
 
             // Sums up total storage size
-            var file_size = comprHtml.length;
+            var file_size = comprHTML.length;
             total_size += file_size;
             // Makes sessionStorage size accessible
             Light.prototype.storageSize = total_size;
 
             // Assigns compressed html to route
-            sessionStorage[route] = comprHtml;
+            sessionStorage[route] = comprHTML;
 
             log('html stored!');
           }
@@ -99,6 +99,16 @@ function Light(settings) {
         }
       });
     });
+    var node = document.doctype;
+    var doctypeStr = '<!DOCTYPE '
+                      + node.name
+                      + (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '')
+                      + (!node.publicId && node.systemId ? ' SYSTEM' : '') 
+                      + (node.systemId ? ' "' + node.systemId + '"' : '')
+                      + '>';
+    var currentHTML = doctypeStr + document.documentElement.outerHTML;
+    var comprHTML = LZString.compress(currentHTML);
+    sessionStorage[window.location.pathname] = comprHTML;
 
   } // storeViews
     
@@ -130,7 +140,7 @@ function Light(settings) {
     }
 
     if (typeof settings.html == 'undefined') {
-      changeView();
+      changeView(link);
     }
     else {
       var routes = light.routes;
@@ -142,6 +152,11 @@ function Light(settings) {
       }
     }
   });
+
+  // On back button
+  window.onpopstate = function(event) {
+    log(document.location)
+  };
 
   // Becomes default choice
   if (typeof settings.on == 'undefined' || 'intervals') {
