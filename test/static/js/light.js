@@ -38,19 +38,17 @@ function Light(settings) {
 
   var light = this;
 
+  if (typeof settings == 'undefined') {
+    settings = {};
+  }
+
+
   /* =================================
       Setting up routes
       Storing HTML into sessionStorage
      ================================= */
 
   light.storeViews = function() {
-
-    // Run function only once per page
-    light.storeViews = Function('');
-
-    if (typeof settings == 'undefined') {
-      settings = {};
-    }
 
     if ( settings.hasOwnProperty('html') ) {
       var routes = settings.html;
@@ -125,53 +123,61 @@ function Light(settings) {
     console.time('renderPage');
     var url = $jq(this).attr('href');
     renderPage(url);
-    History.pushState(null, null, url);
+    history.pushState({foo:'bar'}, null, url);
     console.timeEnd('renderPage');
   });
 
-  // Mouse cursor worker
-  (function() {
+  if (typeof settings.on == 'undefined' || 'intervals') {
+    window.setInterval(function() {
+      light.storeViews();
+    }, 60000);
+  }
 
-    // Distance of mouse and element
-    function calculateDistance(elem, mouseX, mouseY) {
-             
-      function PYTHAGORAS_THEOREM(x, y) {
-        var sqrt = Math.sqrt;
-        var square = function(num) {
-          return Math.pow(num, 2);
+  // Mouse cursor worker
+  if (settings.on == 'mouseApproach') {
+    (function() {
+
+      // Distance of mouse and element
+      function calculateDistance(elem, mouseX, mouseY) {
+               
+        function PYTHAGORAS_THEOREM(x, y) {
+          var sqrt = Math.sqrt;
+          var square = function(num) {
+            return Math.pow(num, 2);
+          }
+          
+          // NOTE:  Negative values make no difference (squared)
+          return sqrt( square(x) + square(y) );
         }
         
-        // NOTE:  Negative values make no difference (squared)
-        return sqrt( square(x) + square(y) );
+        var distanceX = mouseX - ( elem.offset().left +
+                        (elem.width() / 2) );
+        var distanceY = mouseY - ( elem.offset().top +
+                        (elem.height() / 2) );
+        return Math.floor( PYTHAGORAS_THEOREM(distanceX, distanceY) );
       }
-      
-      var distanceX = mouseX - ( elem.offset().left +
-                      (elem.width() / 2) );
-      var distanceY = mouseY - ( elem.offset().top +
-                      (elem.height() / 2) );
-      return Math.floor( PYTHAGORAS_THEOREM(distanceX, distanceY) );
-    }
 
-    $jq(document).mousemove(function(e) {  
-      var mouseX = e.pageX;
-      var mouseY = e.pageY;
-      var links = $jq('a');
+      $jq(document).mousemove(function(e) {  
+        var mouseX = e.pageX;
+        var mouseY = e.pageY;
+        var links = $jq('a');
 
-      try {
-        var distance = calculateDistance(links, mouseX, mouseY);
-        // Cursor distance with link
-        if (distance <= 250) {
-          // Renders page in background when approaching link
-          light.storeViews();
+        try {
+          var distance = calculateDistance(links, mouseX, mouseY);
+          // Cursor distance with link
+          if (distance <= 250) {
+            // Renders page in background when approaching link
+            light.storeViews();
+            light.storeViews = Function('');
+          }
         }
-      }
-      catch(TypeError) {
-        return null;
-      }
+        catch(TypeError) {
+          return null;
+        }
+      });
 
-    });
-
- })();
+    })();
+  }
 
 } // Light object
 
