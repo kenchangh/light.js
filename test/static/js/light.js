@@ -108,7 +108,7 @@ function Light(settings) {
      ================================ */
 
   // Renders page from sessionStorage based on route
-  function renderPage(route) {
+  function renderView(route) {
     var html = LZString.decompress(sessionStorage[route]);
     var doc = document.open();
     doc.write(html);
@@ -120,11 +120,11 @@ function Light(settings) {
     // Prevents link behavior
     e.preventDefault();
 
-    console.time('renderPage');
+    console.time('renderView');
     var url = $jq(this).attr('href');
-    renderPage(url);
-    history.pushState({foo:'bar'}, null, url);
-    console.timeEnd('renderPage');
+    renderView(url);
+    history.pushState(null, null, url);
+    console.timeEnd('renderView');
   });
 
   if (typeof settings.on == 'undefined' || 'intervals') {
