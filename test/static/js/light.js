@@ -99,12 +99,12 @@ function Light(settings) {
         }
       });
     });
-    var node = document.doctype;
+    var doctype = document.doctype;
     var doctypeStr = '<!DOCTYPE '
-                      + node.name
-                      + (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '')
-                      + (!node.publicId && node.systemId ? ' SYSTEM' : '') 
-                      + (node.systemId ? ' "' + node.systemId + '"' : '')
+                      + doctype.name
+                      + (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '')
+                      + (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
+                      + (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
                       + '>';
     var currentHTML = doctypeStr + document.documentElement.outerHTML;
     var comprHTML = LZString.compress(currentHTML);
