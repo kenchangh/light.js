@@ -181,7 +181,7 @@ function Light(settings) {
 
       light.storeViews();
 
-    }, setttings.interval);
+    }, settings.interval);
   }
 
 } // Light object
