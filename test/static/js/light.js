@@ -38,7 +38,7 @@ function Light(settings) {
 
   var light = this;
 
-  if (typeof settings == 'undefined') {
+  if (typeof settings === 'undefined') {
     settings = {};
   }
 
@@ -139,7 +139,7 @@ function Light(settings) {
       console.timeEnd('renderView');
     }
 
-    if (typeof settings.html == 'undefined') {
+    if (typeof settings.html === 'undefined') {
       changeView(link);
     }
     else {
@@ -169,13 +169,13 @@ function Light(settings) {
      ================================ */
 
   // Becomes default choice
-  if ( (typeof settings.on == 'undefined')
+  if ( (typeof settings.on === 'undefined')
        || settings.on == 'intervals' ) {
     light.storeViews();
 
     window.setInterval(function() {
       // Default value for interval
-      if (typeof settings.interval == 'undefined') {
+      if (typeof settings.interval === 'undefined') {
         settings.interval = 50000;
       }
 
