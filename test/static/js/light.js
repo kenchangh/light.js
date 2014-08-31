@@ -32,14 +32,15 @@ function supportStorage() {
   }
 }
 
-// Light takes in an object, html as key, values as array of routes
-// { html: ['/', '/home', '/login'] }
-function Light(settings) {
+// Light takes in a list of routes
+// Light(['/hot', '/new', '/top'])
+function Light(routes) {
 
   var light = this;
 
-  if (typeof settings === 'undefined') {
-    settings = {};
+  if (routes !instanceof Array) {
+    throw new TypeError('Routes have to be an array, not'
+                        + typeof(routes) + '!')
   }
 
   /* =================================
@@ -49,27 +50,9 @@ function Light(settings) {
 
   light.storeViews = function() {
 
-    if ( settings.hasOwnProperty('html') ) {
-      var routes = settings.html;
-     
-      // If base_url is given, just concat it before every route
-      if ( settings.hasOwnProperty('baseUrl')  ) {
-        for (var i = 0; i < routes.length; i++) {
-            routes[i] = '/' + settings.baseUrl + '/' + routes[i];
-        }
-      }
-    }
-    else {
-      var routes = [];
-      var links = document.getElementsByTagName('a');
-      // A vanilla method is much, much faster
-      for (var i = 0; i < links.length; i++) {
-        routes.push(links[i].pathname); 
-      }
-    }
-
     var total_size = 0;
     light.routes = routes;
+    
     // Iterates through routes and make Ajax requests to them
     routes.forEach(function(route) {
       $jq.ajax({
@@ -88,7 +71,7 @@ function Light(settings) {
             Light.prototype.storageSize = total_size;
 
             // Assigns compressed html to route
-            sessionStorage[route] = comprHTML;
+            localStorage[route] = comprHTML;
 
             log('html stored!');
           }
@@ -99,17 +82,6 @@ function Light(settings) {
         }
       });
     });
-    var doctype = document.doctype;
-    var doctypeStr = '<!DOCTYPE '
-                      + doctype.name
-                      + (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '')
-                      + (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') 
-                      + (doctype.systemId ? ' "' + doctype.systemId + '"' : '')
-                      + '>';
-    var currentHTML = doctypeStr + document.documentElement.outerHTML;
-    var comprHTML = LZString.compress(currentHTML);
-    sessionStorage[window.location.pathname] = comprHTML;
-
   } // storeViews
     
   /* ================================
@@ -139,16 +111,11 @@ function Light(settings) {
       console.timeEnd('renderView');
     }
 
-    if (typeof settings.html === 'undefined') {
-      changeView(link);
-    }
-    else {
-      var routes = light.routes;
-      for (var i = 0; i < routes.length; i++) {
-        if (link == routes[i]) {
-          changeView(link);
-          break;
-        }
+    var routes = light.routes;
+    for (var i = 0; i < routes.length; i++) {
+      if (link == routes[i]) {
+        changeView(link);
+        break;
       }
     }
   });
@@ -164,30 +131,4 @@ function Light(settings) {
     renderView(currentLocation);
   };
 
-  /* ================================
-      Settings
-     ================================ */
-
-  // Becomes default choice
-  if ( (typeof settings.on === 'undefined')
-       || settings.on == 'intervals' ) {
-    light.storeViews();
-
-    window.setInterval(function() {
-      // Default value for interval
-      if (typeof settings.interval === 'undefined') {
-        settings.interval = 50000;
-      }
-
-      light.storeViews();
-
-    }, settings.interval);
-  }
-
 } // Light object
-
-// TODO Setup test cases
-// With mouseApproach
-// With html set
-// With base_url
-
