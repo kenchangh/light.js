@@ -1,28 +1,30 @@
 Light.js
 =====
-###Renders the future in light-speed!
+####Renders the future in light-speed!
 
 Table of Content
 ----------------
 - [Introduction](#intro)
+- [How Does It Work?](#workings)
 - [Getting Started](#start)
 - [Support](#support)
 
 Introduction <a name='intro'></a>
 ------------
-Light.js is a speedy client-side page pre-renderer. It lets you do what your server is supposed to do, process and render data. Then on the client's end, it just lazily loads the pre-rendered page, without relying on the response times.
+Light.js is a speedy client side pre-renderer. What a mouthful, what do you mean?! Light.js stores all your html files in the localStorage and then renders it **right away**, without the need for connection.
 
-How does this pre-rendering work without hurting page load times? The trick is that Light.js tracks the movement of the mouse. 
+How Does It Work? <a name='workings'></a>
+-----------------
+First, you have to pass in routes of your site. Light.js will then make Ajax requests to each of them, then storing them into the user's browser's localStorage. When the user visits to one of the urls, Light.js serves up the page from the localStorage, *with light speed*. This is so fast because all the browser needs to do is render the HTML, no need for making connections.
 
-Whenever it gets close enough to a link, it will send a background request to the server, returning the rendered webpage and stores it into the Storage. When the user clicks the link, Javascript just loads the page out from the Storage, without any delay from the connection.
+How do you keep the pages stored by Light.js updated? That's why Light.js works closely with socket.io. When the server changes the content of the webpage, it will notify the user's browser through web sockets and Light.js will remake the Ajax request, store the page and then ready to serve it up to the user.
 
-Light.js does not only restrict pre-rendering to the movement of mouse only, it comes with several options that make it a flexible tool.
+You can, however, choose not to keep it dynamic by telling Light.js so.
 
 Features <a name='features'></a>
 --------
 - Preload rendered page into Javascript
 - Renders with Javascript (almost 0 load time)
-- Snappy web page performance
 
 Getting Started <a name='start'></a>
 ---------------
@@ -31,36 +33,19 @@ Setting Light.js up is fairly easy. Just add the link to the script into your HT
 NOTE: It has to be below the jQuery link.
 ```html
 <script src="/static/js/jquery.min.js"></script> <!-- This has to come first -->
-<script src="/static/js/light.js"></script> <!-- This second -->
+<script src="/static/js/socket.io-client.js"></script> <!-- This second (if you want things dynamic) -->
+<script src="/static/js/light.js"></script> <!-- Finally! -->
 ```
 
 Next, you have to define certain things to Light.
 
 Firstly, give a list of links to your HTML files for Light to store.
 ```javascript
-var light_server = new Light({
-                       html: ['home', 'submit', 'login', 'extras/new']
-                   });
-```
-Or better yet, set up your routes like so.
-
-**Node.js (Express)**
-```javascript
-// This renders html based on their routes
-app.get('/views/:html', function(req, res) {
-    res.render( req.param('html'), { title: 'View files' } );
-});
-```
-**Client-side**
-```javascript
-var light_server = new Light({
-                       base_url: 'views',
-                       html: ['home', 'submit', 'login']
-                   });
+var light = new Light('/', '/new', '/top');
 ```
 
 Support <a name='support'></a>
 -------
-Any comments or questions, please contact me at guanhao3797@gmail.com or even, tweet to me at [@guanhao97](https://twitter.com/guanhao97).
+Any comments or questions, please contact me at guanhao3797@gmail.com or even, tweet to me at [@mavenave](https://twitter.com/guanhao97).
 
 The code is licensed under the MIT license.
