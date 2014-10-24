@@ -38,9 +38,9 @@ function Light(routes) {
 
   var light = this;
 
-  if (routes !instanceof Array) {
-    throw new TypeError('Routes have to be an array, not'
-                        + typeof(routes) + '!')
+  if (!routes instanceof Array) {
+    throw new TypeError('Routes have to be an array, not' +
+                        typeof(routes) + '!');
   }
 
   /* =================================
@@ -76,45 +76,42 @@ function Light(routes) {
             log('html stored!');
           }
           else {
-            throw new FeatureUnsupported('Browser does not '
-                                         + 'support sessionStorage');
+            throw new FeatureUnsupported('Browser does not ' +
+                                         'support sessionStorage');
           }
         }
       });
     });
-  } // storeViews
+  }; // storeViews
     
   /* ================================
       Handles link clicks
       Renders the page
      ================================ */
+  function removeScripts(html) {
+    return $jq(html).find('script').remove().html();
+  }
 
   // Renders page from sessionStorage based on route
   function renderView(route) {
-    var html = LZString.decompress(sessionStorage[route]);
+    console.time('renderView');
+    var html = removeScripts(
+      LZString.decompress(localStorage[route]));
     var doc = document.open();
     doc.write(html);
     doc.close();
+    history.pushState(null, null, route);
+    console.timeEnd('renderView');
   }
 
   // Render page based on link clicked
   $jq('a').click(function(e) {
-
+    e.preventDefault();
     var link = this.pathname;
-    function changeView(link) {
-      e.preventDefault();
-
-      console.time('renderView');
-      var url = link;
-      renderView(url);
-      history.pushState(null, null, url);
-      console.timeEnd('renderView');
-    }
-
     var routes = light.routes;
     for (var i = 0; i < routes.length; i++) {
       if (link == routes[i]) {
-        changeView(link);
+        renderView(link);
         break;
       }
     }
@@ -125,10 +122,10 @@ function Light(routes) {
      ================================ */
 
   // On back button
-  window.onpopstate = function(event) {
+  /*window.onpopstate = function(event) {
     var currentLocation = window.location.pathname;
-    log(currentLocation)
+    log(currentLocation);
     renderView(currentLocation);
-  };
+  };*/
 
 } // Light object
